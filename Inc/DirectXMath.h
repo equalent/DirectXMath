@@ -69,6 +69,10 @@
 #define _XM_AVX_INTRINSICS_
 #endif
 
+#if !defined(_XM_WASM_SIMD128_INTRINSICS_) && defined(__wasm_simd128__) && !defined(_XM_NO_INTRINSICS_)
+#define _XM_WASM_SIMD128_INTRINSICS_
+#endif
+
 #if defined(_XM_AVX_INTRINSICS_) && !defined(_XM_SSE4_INTRINSICS_)
 #define _XM_SSE4_INTRINSICS_
 #endif
@@ -81,7 +85,7 @@
 #define _XM_SSE_INTRINSICS_
 #endif
 
-#if !defined(_XM_ARM_NEON_INTRINSICS_) && !defined(_XM_SSE_INTRINSICS_) && !defined(_XM_NO_INTRINSICS_)
+#if !defined(_XM_ARM_NEON_INTRINSICS_) && !defined(_XM_SSE_INTRINSICS_) && !defined(_XM_WASM_SIMD128_INTRINSICS_) && !defined(_XM_NO_INTRINSICS_)
 #if (defined(_M_IX86) || defined(_M_X64) || __i386__ || __x86_64__ || __powerpc64__) && !defined(_M_HYBRID_X86_ARM64) && !defined(_M_ARM64EC)
 #define _XM_SSE_INTRINSICS_
 #elif defined(_M_ARM) || defined(_M_ARM64) || defined(_M_HYBRID_X86_ARM64) || defined(_M_ARM64EC) || __arm__ || __aarch64__
@@ -89,7 +93,7 @@
 #elif !defined(_XM_NO_INTRINSICS_)
 #error DirectX Math does not support this target
 #endif
-#endif // !_XM_ARM_NEON_INTRINSICS_ && !_XM_SSE_INTRINSICS_ && !_XM_NO_INTRINSICS_
+#endif // !_XM_ARM_NEON_INTRINSICS_ && !_XM_SSE_INTRINSICS_ && !_XM_WASM_SIMD128_INTRINSICS_ && !_XM_NO_INTRINSICS_
 
 #if defined(_XM_SSE_INTRINSICS_) && defined(_MSC_VER) && (_MSC_VER >= 1920) && !defined(__clang__) && !defined(_XM_SVML_INTRINSICS_) && !defined(_XM_DISABLE_INTEL_SVML_)
 #define _XM_SVML_INTRINSICS_
@@ -150,6 +154,8 @@
 #else
 #include <arm_neon.h>
 #endif
+#elif defined(_XM_WASM_SIMD128_INTRINSICS_)
+#include <wasm_simd128.h>
 #endif
 #endif // !_XM_NO_INTRINSICS_
 
